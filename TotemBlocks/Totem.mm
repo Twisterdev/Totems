@@ -44,27 +44,26 @@ enum {
         b2FixtureDef totemDef;
         
         theBody.type = b2_dynamicBody;
-        //the_body.position.Set(arc4random() % 10, 10.0f);
-        theBody.position.Set(7.0f, 15.0f + downScroll);
+        theBody.position.Set(6.0f, 13.0f + downScroll);
         theBody.userData = @"1";
         
         self.finalBody = _world->CreateBody(&theBody);
-        totemDef.shape = &theBox;
-        //the_box.SetAsBox(((arc4random() % 50) + 10) / 100.0f, ((arc4random() % 50) + 10) / 100.0f);
+
         theBox.SetAsBox(.75f, .75f);
+        totemDef.shape = &theBox;
         totemDef.density = 1;
-        totemDef.friction = 0.2f;
+        totemDef.friction = 0.3f;
         totemDef.restitution = 0;
-        //flor_def.restitution = 0.2f;
+
         
         _finalBody->CreateFixture(&totemDef);
         
-        b2Vec2 force = b2Vec2(10, -2);
-        _finalBody->ApplyLinearImpulse(force, theBody.position);
+        //b2Vec2 force = b2Vec2(10, -2);
+        //_finalBody->ApplyLinearImpulse(force, theBody.position);
         
         
         b2BodyDef anchorBodyDef;
-        anchorBodyDef.position.Set(screenSize.width/PTM_RATIO/2,screenSize.height/PTM_RATIO*1.0f); 
+        anchorBodyDef.position.Set(screenSize.width/PTM_RATIO/2,screenSize.height/PTM_RATIO + downScroll); 
         self.anchorBody = _world->CreateBody(&anchorBodyDef);
         b2RopeJointDef jd;
         jd.bodyA = self.anchorBody; //define bodies
@@ -84,5 +83,17 @@ enum {
     return self;
 }
 
+/*
++ (b2FixtureDef *) getDefinition{
+    b2PolygonShape theBox;
+    b2FixtureDef totemDef;
+    theBox.SetAsBox(.75f, .75f);
+    totemDef.shape = &theBox;
+    totemDef.density = 1;
+    totemDef.friction = 0.4f;
+    totemDef.restitution = 0;
+    
+}
+*/
 
 @end
