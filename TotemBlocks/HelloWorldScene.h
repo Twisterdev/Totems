@@ -3,7 +3,7 @@
 //  TotemBlocks
 //
 //  Created by Felipe Campos Clarke on 27-05-12.
-//  Copyright __MyCompanyName__ 2012. All rights reserved.
+//  Copyright Twisterdev 2012. All rights reserved.
 //
 
 
@@ -28,7 +28,6 @@
     float _firstTotem;
     NSMutableArray * _vRopes;
     Totem * _totem;
-
 }
 
 -(void) reset;

@@ -109,7 +109,7 @@ enum {
         the_box.SetAsBox(10.0f, .75f);
         
         flor_def.density = 0;
-        flor_def.friction = 0.2f;
+        flor_def.friction = 0.6f;
         flor_def.restitution = 0;
         
         final_body->CreateFixture(&flor_def);
@@ -120,7 +120,7 @@ enum {
         [self addNewTotem];
         
         [self schedule:@selector(tick:)];
-        [self schedule: @selector(updateDeletes:) interval:0.03];
+        [self schedule: @selector(update:) interval:0.03];
         
         //[self schedule:@selector(addNewRandomObject:) interval:1.0];
 
@@ -164,6 +164,48 @@ enum {
 }
 
 
+-(b2Body *) selectTotem: (int)totemIndex{
+    NSValue * bodyPointer = [totemsBodyes objectAtIndex: totemIndex];
+    b2Body *body = (b2Body *) [bodyPointer pointerValue];
+    return body;
+    
+}
+
+-(void) moveScreen: (int)level up: (Boolean)up{
+    CGSize winSize = [CCDirector sharedDirector].winSize;
+    float middleScreen = (winSize.height / PTM_RATIO) * 0.5;
+    float topObject = [self selectTotem:[totemsBodyes count] - 1]->GetPosition().y;
+    
+    if(topObject >= middleScreen || [totemsBodyes count] >= 5){
+        
+        if(up){
+            self.downScroll += [self selectTotem:[totemsBodyes count] - 4 + level]->GetPosition().y -
+            [self selectTotem:[totemsBodyes count] - 5]->GetPosition().y;
+            NSLog(@"MITAD %f", round(_downScroll + (winSize.height / PTM_RATIO) * 0.5 + .75f));
+            NSLog(@"ULTIMO TOTEM %f", round(topObject + _downScroll));
+        }else{
+            int from, until;
+            do {
+                level++;
+                if([totemsBodyes count] == 5)
+                    break;
+                topObject = [self selectTotem:[totemsBodyes count] - 2]->GetPosition().y;
+                from = round(topObject + 1.5f * level);
+                until = round((_downScroll - 1.5f) + (winSize.height / PTM_RATIO) * 0.5 + .75f);
+            } while (from != until);
+            
+            level--;
+            self.downScroll -= [self selectTotem:[totemsBodyes count] - 4 + level]->GetPosition().y -
+            [self selectTotem:[totemsBodyes count] - 5]->GetPosition().y;
+        }
+        
+        CGPoint pointDest = ccp(0, - PTM_RATIO * _downScroll);
+        id action  = [CCMoveTo actionWithDuration:1 position: pointDest]; 
+        id ease    = [CCEaseExponentialOut actionWithAction:action]; 
+        [self runAction:ease];
+    }
+}
+
 -(void)addNewTotem{
     //REVISAR QUE TAN EFICIENTE ES HACER ACA UN AUTORELEASE
     self.totem = [[[Totem alloc] initWithWorld:_world downScroll:_downScroll] autorelease];
@@ -171,56 +213,84 @@ enum {
     [totemsBodyes addObject:[NSValue valueWithPointer:totemBody]];
     self.vRopes = [self.totem vRopes];
     [self addChild: self.totem];
-    
-    //Convierto el antepenultimo totem en un cuerpo estatico
-    //para que solo los ultimos dos cuerpos de la torre reacciones a estimulos del mundo
-    if([totemsBodyes count] >= 4){
-        b2Body * body;
-        NSValue * bodyPointer = [totemsBodyes objectAtIndex:[totemsBodyes count] - 4];
-        body = (b2Body *) [bodyPointer pointerValue];
-        body->SetType(b2_staticBody);
-    }
 }
 
 
--(void) updateDeletes: (ccTime) dt 
+-(void) update: (ccTime) dt 
 {
+    
+    Boolean createTotem = true;
     CGSize screenSize = [CCDirector sharedDirector].winSize;
     //float destroyPosiyion = ceil(((screenSize.height / PTM_RATIO) * 0.15) * 10) / 10;
     float destroyPosiyion = ceil((screenSize.height / PTM_RATIO) * 0.15);
-    if([totemsBodyes count] > 1){
+    if([totemsBodyes count] >= 2){
+        
         b2Body * body;
-        for(uint i=1;i<[totemsBodyes count];i++) {
-            NSValue * bodyPointer = [totemsBodyes objectAtIndex:i];
-            body = (b2Body *) [bodyPointer pointerValue];
+        int limit = [totemsBodyes count] - 2;
+        if([totemsBodyes count] == 2)
+            limit = 1;
+        
+        for(uint i=limit;i<[totemsBodyes count];i++) {
+            body = [self selectTotem:i];
+            
+            if(body->GetLinearVelocity().Length() != 0 || 
+               body->GetPosition().y > ((screenSize.height / PTM_RATIO) * 0.5) + _downScroll)
+                createTotem = false;
+            
             if(body->GetPosition().y < destroyPosiyion){
-                NSLog(@"POSICION OBJETOS %f", body->GetPosition().y);
-                if([totemsBodyes count]-1 == i)
-                    [self addNewTotem];
+                
+                Boolean waitCreate = false;
+                
+                if([totemsBodyes count]-1 == i){
+                    if([totemsBodyes count] >= 3){
+                        if([self selectTotem:[totemsBodyes count] - 3]->GetType() == b2_staticBody){
+                            NSLog(@"velocidad: %i", (int)[self selectTotem:i - 1]->GetLinearVelocity().Length());
+                            if((int)[self selectTotem:i - 1]->GetLinearVelocity().Length() != 0 && 
+                               [totemsBodyes count] != 5){
+                                waitCreate = true;
+                                createTotem = false;
+                            }else{
+                                [self moveScreen:0 up:false];
+                                waitCreate = false;
+                            }
+                        }
+                    }else if([totemsBodyes count]-2 == i){
+                        if([totemsBodyes count] >= 3){
+                            waitCreate = false;
+                        }
+                    }
+                    
+                    if(!waitCreate){
+                        [self addNewTotem];
+                        createTotem = false;
+                    }
+                }
+                
+                
                 _world->DestroyBody(body);
                 [totemsBodyes removeObject:[NSValue valueWithPointer:body]];
-                NSValue * bodyPointer = [totemsBodyes objectAtIndex:[totemsBodyes count] - 3];
-                body = (b2Body *) [bodyPointer pointerValue];
-                body->SetType(b2_dynamicBody);
-                
-                /*
-    
-                body->DestroyFixture(body->GetFixtureList());
-                
-                b2PolygonShape theBox;
-                b2FixtureDef totemDef;
-                
-                totemDef.shape = &theBox;
-                theBox.SetAsBox(.75f, .75f);
-                totemDef.density = 1;
-                totemDef.friction = 0.8f;
-                totemDef.restitution = 0;
-                
-                body->CreateFixture(&totemDef);
-                
-                */
+                if([totemsBodyes count] >= 3){
+                    if(waitCreate)
+                        body = [self selectTotem:[totemsBodyes count] - 2];
+                    else
+                        body = [self selectTotem:[totemsBodyes count] - 3];
+                        
+                    body->SetType(b2_dynamicBody);
+                    //b2FixtureDef *totemDef = [Totem getDefinition];
+                    b2PolygonShape theBox;
+                    b2FixtureDef totemDef;
+                    theBox.SetAsBox(.75f, .75f);
+                    totemDef.shape = &theBox;
+                    totemDef.density = 1;
+                    totemDef.friction = 0.4f;
+                    totemDef.restitution = 0;
+                    body->DestroyFixture(body->GetFixtureList());
+                    body->CreateFixture(&totemDef);
+                }
             }
         }
+        if(createTotem)
+            [self addNewTotem];
     }
 }
 
@@ -233,22 +303,7 @@ enum {
     
 	_world->Step(dt, velocityIterations, positionIterations);
     
-    
-
-    
-    
-    
-    /*
-    
-    Boolean destroy = false;
-    Boolean destroyOne = false;
-    std::vector<MyContact>::iterator pos;
-    */
-    
-    
-
-    
-    Boolean createTotem = false;
+    Boolean hitTotem = false;
     
     for(uint i=0;i<[self.vRopes count];i++) {
         [[self.vRopes objectAtIndex:i] update:dt];
@@ -268,34 +323,37 @@ enum {
         if([blockA isEqualToString:@"1"] && [blockB isEqualToString:@"1"]){
             
             if([totemsBodyes indexOfObject:[NSValue valueWithPointer:bodyA]] == [totemsBodyes count] - 1 ||
-              [totemsBodyes indexOfObject:[NSValue valueWithPointer:bodyB]] == [totemsBodyes count] - 1){
-                createTotem = true;
-           }
+               [totemsBodyes indexOfObject:[NSValue valueWithPointer:bodyB]] == [totemsBodyes count] - 1){
+                
+                //Convierto el antepenultimo totem en un cuerpo estatico
+                //para que solo los ultimos dos cuerpos de la torre reacciones a estimulos del mundo
+                if([totemsBodyes count] >= 3){
+                    b2Body * body = [self selectTotem:[totemsBodyes count] - 3];
+                    body->SetType(b2_staticBody);
+                }
+                
+                if(!hitTotem)
+                    [self moveScreen:0 up:true];
+                hitTotem = true;
+            }
         }
         
         
-        if([totemsBodyes count] == 1 || createTotem){
+        if([totemsBodyes count] == 1 || hitTotem){
             b2Joint *j = _world->GetJointList();
             if(j)
                 _world->DestroyJoint(j);
             
             [_vRopes removeAllObjects];
             
-            createTotem = false;
-            [self addNewTotem];
+            if([totemsBodyes count] == 1)
+                [self addNewTotem];
         }
-        
-        //bodyA->SetType(b2_staticBody);
-        //bodyB->SetType(b2_staticBody);
-        
-        
-                
-        //b2Vec2 force = b2Vec2(10, -2);
-        //bodyB->ApplyLinearImpulse(force, bodyB->GetPosition());
-        
     }
     
     self.contactListener->_contacts.clear();
+    
+    
     
     
     /*
@@ -425,6 +483,7 @@ enum {
     
     */
 }
+
 
 
 -(void)reset {
