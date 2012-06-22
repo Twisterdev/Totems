@@ -7,6 +7,7 @@
 //
 
 #import "Totem.h"
+#import "CCAnimate+SequenceLoader.h"
 
 enum {
     FLOOR   = 0,
@@ -34,9 +35,24 @@ enum {
         _world = world;
         CGSize screenSize = [CCDirector sharedDirector].winSize;
         
+        
+        [[CCSpriteFrameCache sharedSpriteFrameCache] addSpriteFramesWithFile:@"totems.plist"];
+        CCSprite * totemCharacter = [CCSprite spriteWithSpriteFrameName:@"totem-1.png"];
+        totemCharacter.tag = TOTEMMOVING;
+        [self addChild:totemCharacter z:1];
+        
+        /*
+        CCAction * repeatForever =  [CCRepeatForever actionWithAction:
+                                    [CCAnimate actionWithSpriteSequence:@"totem-%d.png"
+                                                              numFrames:4
+                                                                  delay:0.1
+                                                   restoreOriginalFrame:YES] ];
+        
+        [totemCharacter runAction:repeatForever];
+         */
+        
         self.ropeSpriteSheet = [CCSpriteBatchNode batchNodeWithFile:@"rope.png" ];
         [self addChild:self.ropeSpriteSheet];
-        // +++ Init array that will hold references to all our ropes
         self.vRopes = [[NSMutableArray alloc] init];
         
         b2BodyDef theBody;
@@ -45,7 +61,7 @@ enum {
         
         theBody.type = b2_dynamicBody;
         theBody.position.Set(6.0f, 13.0f + downScroll);
-        theBody.userData = @"1";
+        theBody.userData = totemCharacter;
         
         self.finalBody = _world->CreateBody(&theBody);
 

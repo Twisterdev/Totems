@@ -130,6 +130,14 @@
 		3D0276BA15797EF800A89F98 /* b2RopeJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D02764215797EF700A89F98 /* b2RopeJoint.cpp */; };
 		3D0276BB15797EF800A89F98 /* b2WeldJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3D02764415797EF700A89F98 /* b2WeldJoint.cpp */; };
 		3D5381F91578396400E39BBE /* MyContactListener.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3D5381F81578396400E39BBE /* MyContactListener.mm */; };
+		3D53C0181592AA5700776FA3 /* bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D53C0171592AA5700776FA3 /* bg.png */; };
+		3D53C01A1592AADD00776FA3 /* floor.png in Resources */ = {isa = PBXBuildFile; fileRef = 3D53C0191592AADD00776FA3 /* floor.png */; };
+		3D9D4F1615921DFE00D1A48A /* CCAnimate+SequenceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D4F1315921DFE00D1A48A /* CCAnimate+SequenceLoader.m */; };
+		3D9D4F1715921DFE00D1A48A /* CCAnimation+SequenceLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D9D4F1515921DFE00D1A48A /* CCAnimation+SequenceLoader.m */; };
+		3D9D4F1C1592208100D1A48A /* totems.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D4F181592208100D1A48A /* totems.plist */; };
+		3D9D4F1D1592208100D1A48A /* totems@2x.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D4F191592208100D1A48A /* totems@2x.plist */; };
+		3D9D4F1E1592208100D1A48A /* totems.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D4F1A1592208100D1A48A /* totems.pvr */; };
+		3D9D4F1F1592208100D1A48A /* totems@2x.pvr in Resources */ = {isa = PBXBuildFile; fileRef = 3D9D4F1B1592208100D1A48A /* totems@2x.pvr */; };
 		3DDFD7CA158332C500C9E432 /* Totem.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3DDFD7C9158332C500C9E432 /* Totem.mm */; };
 		3DE0DDE91572DC8F003B5457 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DE0DDE81572DC8F003B5457 /* QuartzCore.framework */; };
 		3DE0DDEB1572DC8F003B5457 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3DE0DDEA1572DC8F003B5457 /* OpenGLES.framework */; };
@@ -435,6 +443,16 @@
 		3D5381EB157823D500E39BBE /* Totem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Totem.h; sourceTree = "<group>"; };
 		3D5381F71578396400E39BBE /* MyContactListener.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MyContactListener.h; path = ../MyContactListener.h; sourceTree = "<group>"; };
 		3D5381F81578396400E39BBE /* MyContactListener.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MyContactListener.mm; path = ../MyContactListener.mm; sourceTree = "<group>"; };
+		3D53C0171592AA5700776FA3 /* bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = bg.png; sourceTree = "<group>"; };
+		3D53C0191592AADD00776FA3 /* floor.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = floor.png; sourceTree = "<group>"; };
+		3D9D4F1215921DFE00D1A48A /* CCAnimate+SequenceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCAnimate+SequenceLoader.h"; sourceTree = "<group>"; };
+		3D9D4F1315921DFE00D1A48A /* CCAnimate+SequenceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCAnimate+SequenceLoader.m"; sourceTree = "<group>"; };
+		3D9D4F1415921DFE00D1A48A /* CCAnimation+SequenceLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CCAnimation+SequenceLoader.h"; sourceTree = "<group>"; };
+		3D9D4F1515921DFE00D1A48A /* CCAnimation+SequenceLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CCAnimation+SequenceLoader.m"; sourceTree = "<group>"; };
+		3D9D4F181592208100D1A48A /* totems.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = totems.plist; sourceTree = "<group>"; };
+		3D9D4F191592208100D1A48A /* totems@2x.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "totems@2x.plist"; sourceTree = "<group>"; };
+		3D9D4F1A1592208100D1A48A /* totems.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = totems.pvr; sourceTree = "<group>"; };
+		3D9D4F1B1592208100D1A48A /* totems@2x.pvr */ = {isa = PBXFileReference; lastKnownFileType = file; path = "totems@2x.pvr"; sourceTree = "<group>"; };
 		3DDFD7C9158332C500C9E432 /* Totem.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Totem.mm; sourceTree = "<group>"; };
 		3DE0DDE41572DC8F003B5457 /* TotemBlocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TotemBlocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3DE0DDE81572DC8F003B5457 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -879,6 +897,17 @@
 			path = Joints;
 			sourceTree = "<group>";
 		};
+		3D9D4F1015921DD000D1A48A /* SpriteAnimation */ = {
+			isa = PBXGroup;
+			children = (
+				3D9D4F1215921DFE00D1A48A /* CCAnimate+SequenceLoader.h */,
+				3D9D4F1315921DFE00D1A48A /* CCAnimate+SequenceLoader.m */,
+				3D9D4F1415921DFE00D1A48A /* CCAnimation+SequenceLoader.h */,
+				3D9D4F1515921DFE00D1A48A /* CCAnimation+SequenceLoader.m */,
+			);
+			name = SpriteAnimation;
+			sourceTree = "<group>";
+		};
 		3DE0DDD91572DC8F003B5457 = {
 			isa = PBXGroup;
 			children = (
@@ -914,6 +943,7 @@
 		3DE0DDF81572DC8F003B5457 /* TotemBlocks */ = {
 			isa = PBXGroup;
 			children = (
+				3D9D4F1015921DD000D1A48A /* SpriteAnimation */,
 				3DE0DFD61572FEA1003B5457 /* Rope */,
 				3DE0DFD51572FE8A003B5457 /* Totems */,
 				3DE0DFD71572FEAB003B5457 /* Levels */,
@@ -938,6 +968,12 @@
 		3DE0DDF91572DC8F003B5457 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3D53C0191592AADD00776FA3 /* floor.png */,
+				3D53C0171592AA5700776FA3 /* bg.png */,
+				3D9D4F181592208100D1A48A /* totems.plist */,
+				3D9D4F191592208100D1A48A /* totems@2x.plist */,
+				3D9D4F1A1592208100D1A48A /* totems.pvr */,
+				3D9D4F1B1592208100D1A48A /* totems@2x.pvr */,
 				3D02753F15797B9E00A89F98 /* rope.png */,
 				3DE0DDFA1572DC8F003B5457 /* Default.png */,
 				3DE0DDFC1572DC8F003B5457 /* fps_images.png */,
@@ -1156,6 +1192,12 @@
 				3DE0DE0C1572DC8F003B5457 /* iTunesArtwork in Resources */,
 				3DE0DFCB1572DC92003B5457 /* blocks.png in Resources */,
 				3D02754015797B9E00A89F98 /* rope.png in Resources */,
+				3D9D4F1C1592208100D1A48A /* totems.plist in Resources */,
+				3D9D4F1D1592208100D1A48A /* totems@2x.plist in Resources */,
+				3D9D4F1E1592208100D1A48A /* totems.pvr in Resources */,
+				3D9D4F1F1592208100D1A48A /* totems@2x.pvr in Resources */,
+				3D53C0181592AA5700776FA3 /* bg.png in Resources */,
+				3D53C01A1592AADD00776FA3 /* floor.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1313,6 +1355,8 @@
 				3D0276BA15797EF800A89F98 /* b2RopeJoint.cpp in Sources */,
 				3D0276BB15797EF800A89F98 /* b2WeldJoint.cpp in Sources */,
 				3DDFD7CA158332C500C9E432 /* Totem.mm in Sources */,
+				3D9D4F1615921DFE00D1A48A /* CCAnimate+SequenceLoader.m in Sources */,
+				3D9D4F1715921DFE00D1A48A /* CCAnimation+SequenceLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

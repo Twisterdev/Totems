@@ -71,8 +71,19 @@ enum {
 	// always call "super" init
 	// Apple recommends to re-assign "self" with the "super" return value
 	if( (self=[super init])) {
+        
+        CGSize screenSize = [CCDirector sharedDirector].winSize;
+        
+        CCSprite *spriteBg = [CCSprite spriteWithFile:@"bg.png"];
+        spriteBg.anchorPoint = CGPointZero;
+        [self addChild:spriteBg z:-1];
+        
+        CCSprite *spriteFloor = [CCSprite spriteWithFile:@"floor.png"];
+        spriteFloor.position = ccp(screenSize.width/2,10);
+        [self addChild:spriteFloor z:1];
+        
+        NSLog(@"pocisio %f", spriteFloor.position.y);
 		
-        //CGSize screenSize = [CCDirector sharedDirector].winSize;
         b2Vec2 gravity = b2Vec2(0.0f, -10.0f);
         bool doSleep = true;
         _world = new b2World(gravity, doSleep);
@@ -103,7 +114,7 @@ enum {
         
         the_body.type = b2_staticBody;
         the_body.position.Set(5.0f, .75f);
-        the_body.userData = @"0";
+        //the_body.userData = @"0";
         final_body = _world->CreateBody(&the_body);
         flor_def.shape = &the_box;
         the_box.SetAsBox(10.0f, .75f);
@@ -266,9 +277,12 @@ enum {
                     }
                 }
                 
-                
+                CCSprite *block = (CCSprite *)body->GetUserData();
+                [block removeFromParentAndCleanup:YES];
+                //[self removeChild:block cleanup:YES];
                 _world->DestroyBody(body);
                 [totemsBodyes removeObject:[NSValue valueWithPointer:body]];
+                
                 if([totemsBodyes count] >= 3){
                     if(waitCreate)
                         body = [self selectTotem:[totemsBodyes count] - 2];
@@ -303,13 +317,23 @@ enum {
     
 	_world->Step(dt, velocityIterations, positionIterations);
     
-    Boolean hitTotem = false;
+    for(b2Body *b = _world->GetBodyList(); b; b=b->GetNext()) {    
+        if (b->GetUserData() != NULL) {
+            CCSprite *sprite = (CCSprite *)b->GetUserData();                        
+            sprite.position = ccp(b->GetPosition().x * PTM_RATIO,
+                                  b->GetPosition().y * PTM_RATIO);
+            sprite.rotation = -1 * CC_RADIANS_TO_DEGREES(b->GetAngle());
+        }        
+    }
+    
     
     for(uint i=0;i<[self.vRopes count];i++) {
         [[self.vRopes objectAtIndex:i] update:dt];
     }
     
     std::vector<MyContact>::iterator pos;
+    Boolean hitTotem = false;
+
     
     for(pos = self.contactListener->_contacts.begin(); 
         pos != self.contactListener->_contacts.end(); ++pos) {
@@ -317,10 +341,10 @@ enum {
         
         b2Body *bodyA = contact.fixtureA->GetBody();
         b2Body *bodyB = contact.fixtureB->GetBody();
-        NSString *blockA = (NSString *) bodyA->GetUserData();
-        NSString *blockB = (NSString *) bodyB->GetUserData();
+        CCSprite *blockA = (CCSprite *) bodyA->GetUserData();
+        CCSprite *blockB = (CCSprite *) bodyB->GetUserData();
         
-        if([blockA isEqualToString:@"1"] && [blockB isEqualToString:@"1"]){
+        if(blockA.tag == TOTEMMOVING  && blockB.tag == TOTEMMOVING){
             
             if([totemsBodyes indexOfObject:[NSValue valueWithPointer:bodyA]] == [totemsBodyes count] - 1 ||
                [totemsBodyes indexOfObject:[NSValue valueWithPointer:bodyB]] == [totemsBodyes count] - 1){
